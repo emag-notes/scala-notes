@@ -1,5 +1,7 @@
 package chap10
 
+import chap10.Element.elem
+
 abstract class Element {
 
   def contents: Array[String]
@@ -17,41 +19,51 @@ abstract class Element {
     else contents(0).length
 
   def above(that: Element): Element =
-    new ArrayElement(this.contents ++ that.contents)
+    elem(this.contents ++ that.contents)
 
   def beside(that: Element): Element = {
-    new ArrayElement(
-      for (
-        (line1, line2) <- this.contents zip that.contents
-      ) yield line1 + line2)
+    elem(for ((line1, line2) <- this.contents zip that.contents) yield line1 + line2)
   }
 
   override def toString: String = contents mkString "\n"
 
 }
 
-class ArrayElement(
-    val contents: Array[String]
-) extends Element
+object Element {
 
-class LineElement(s: String) extends Element {
-  val contents             = Array(s)
-  override def height: Int = 1
-  override def width: Int  = s.length
-}
+  private class ArrayElement(
+      val contents: Array[String]
+  ) extends Element
 
-class UniformElement(
-    ch: Char,
-    override val width: Int,
-    override val height: Int
-) extends Element {
-  private val line = ch.toString * width
-  def contents     = Array.fill(height)(line)
+  private class LineElement(s: String) extends Element {
+    val contents             = Array(s)
+    override def height: Int = 1
+    override def width: Int  = s.length
+  }
+
+  private class UniformElement(
+      ch: Char,
+      override val width: Int,
+      override val height: Int
+  ) extends Element {
+    private val line = ch.toString * width
+    def contents     = Array.fill(height)(line)
+  }
+
+  def elem(contents: Array[String]): Element =
+    new ArrayElement(contents)
+
+  def elem(line: String): Element =
+    new LineElement(line)
+
+  def elem(char: Char, width: Int, height: Int): Element =
+    new UniformElement(char, width, height)
+
 }
 
 object ElementClient extends App {
 
-  val element1: Element = new ArrayElement(Array("foo", "barbar"))
+  val element1: Element = elem(Array("foo", "barbar"))
   println("element1:")
   println(element1)
   println(s"element1.contents [${element1.contents}]")
@@ -60,7 +72,7 @@ object ElementClient extends App {
 
   println("------")
 
-  val element2: Element = new LineElement("foo")
+  val element2: Element = elem("foo")
   println("element2:")
   println(element2)
   println(s"element2.contents [${element2.contents}]")
@@ -69,7 +81,7 @@ object ElementClient extends App {
 
   println("------")
 
-  val element3: Element = new UniformElement('x', 2, 3)
+  val element3: Element = elem('x', 2, 3)
   println("element3:")
   println(element3)
   println(s"element3.contents [${element3.contents}]")
