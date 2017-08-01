@@ -15,6 +15,19 @@ abstract class Element {
   def width: Int =
     if (height == 0) 0
     else contents(0).length
+
+  def above(that: Element): Element =
+    new ArrayElement(this.contents ++ that.contents)
+
+  def beside(that: Element): Element = {
+    new ArrayElement(
+      for (
+        (line1, line2) <- this.contents zip that.contents
+      ) yield line1 + line2)
+  }
+
+  override def toString: String = contents mkString "\n"
+
 }
 
 class ArrayElement(
@@ -39,7 +52,8 @@ class UniformElement(
 object ElementClient extends App {
 
   val element1: Element = new ArrayElement(Array("foo", "barbar"))
-  println(s"element1 [$element1]")
+  println("element1:")
+  println(element1)
   println(s"element1.contents [${element1.contents}]")
   println(s"element1.height [${element1.height}]")
   println(s"element1.width  [${element1.width}]")
@@ -47,7 +61,8 @@ object ElementClient extends App {
   println("------")
 
   val element2: Element = new LineElement("foo")
-  println(s"element2 [$element2]")
+  println("element2:")
+  println(element2)
   println(s"element2.contents [${element2.contents}]")
   println(s"element2.height [${element2.height}]")
   println(s"element2.width  [${element2.width}]")
@@ -55,7 +70,8 @@ object ElementClient extends App {
   println("------")
 
   val element3: Element = new UniformElement('x', 2, 3)
-  println(s"element3 [$element3]")
+  println("element3:")
+  println(element3)
   println(s"element3.contents [${element3.contents}]")
   println(s"element3.height [${element3.height}]")
   println(s"element3.width  [${element3.width}]")
