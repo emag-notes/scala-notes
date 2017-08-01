@@ -18,12 +18,36 @@ abstract class Element {
     if (height == 0) 0
     else contents(0).length
 
-  def above(that: Element): Element =
-    elem(this.contents ++ that.contents)
+  def above(that: Element): Element = {
+    val this1 = this widen that.width
+    val that1 = that widen this.width
+    elem(this1.contents ++ that1.contents)
+  }
 
   def beside(that: Element): Element = {
-    elem(for ((line1, line2) <- this.contents zip that.contents) yield line1 + line2)
+    val this1 = this heighten that.height
+    val that1 = that heighten this.height
+    elem(
+      for ((line1, line2) <- this1.contents zip that1.contents)
+        yield line1 + line2
+    )
   }
+
+  def widen(w: Int): Element =
+    if (w <= width) this
+    else {
+      val left  = elem(' ', (w - width) / 2, height)
+      val right = elem(' ', w - width - left.width, height)
+      left beside this beside right
+    }
+
+  def heighten(h: Int): Element =
+    if (h <= height) this
+    else {
+      val top = elem(' ', width, (h - height) / 2)
+      val bot = elem(' ', width, h - height - top.height)
+      top above this above bot
+    }
 
   override def toString: String = contents mkString "\n"
 
@@ -63,28 +87,10 @@ object Element {
 
 object ElementClient extends App {
 
-  val element1: Element = elem(Array("foo", "barbar"))
-  println("element1:")
-  println(element1)
-  println(s"element1.contents [${element1.contents}]")
-  println(s"element1.height [${element1.height}]")
-  println(s"element1.width  [${element1.width}]")
+  println {
+    val column1 = elem("hello") above elem("***")
+    val column2 = elem("***") above elem("world")
+    column1 beside column2
+  }
 
-  println("------")
-
-  val element2: Element = elem("foo")
-  println("element2:")
-  println(element2)
-  println(s"element2.contents [${element2.contents}]")
-  println(s"element2.height [${element2.height}]")
-  println(s"element2.width  [${element2.width}]")
-
-  println("------")
-
-  val element3: Element = elem('x', 2, 3)
-  println("element3:")
-  println(element3)
-  println(s"element3.contents [${element3.contents}]")
-  println(s"element3.height [${element3.height}]")
-  println(s"element3.width  [${element3.width}]")
 }
