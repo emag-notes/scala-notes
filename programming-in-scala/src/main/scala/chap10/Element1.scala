@@ -26,6 +26,15 @@ class LineElement(s: String) extends ArrayElement(Array(s)) {
   override def width: Int  = s.length
 }
 
+class UniformElement(
+    ch: Char,
+    override val width: Int,
+    override val height: Int
+) extends Element1 {
+  private val line = ch.toString * width
+  def contents     = Array.fill(height)(line)
+}
+
 object Element1Client extends App {
 
   val element1: Element1 = new ArrayElement(Array("foo", "barbar"))
@@ -41,4 +50,12 @@ object Element1Client extends App {
   println(s"element2.contents [${element2.contents}]")
   println(s"element2.height [${element2.height}]")
   println(s"element2.width  [${element2.width}]")
+
+  println("------")
+
+  val element3: Element1 = new UniformElement('x', 2, 3)
+  println(s"element3 [$element3]")
+  println(s"element3.contents [${element3.contents}]")
+  println(s"element3.height [${element3.height}]")
+  println(s"element3.width  [${element3.width}]")
 }
