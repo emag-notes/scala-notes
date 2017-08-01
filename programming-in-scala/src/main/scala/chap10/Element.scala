@@ -1,6 +1,6 @@
 package chap10
 
-abstract class Element1 {
+abstract class Element {
 
   def contents: Array[String]
 
@@ -19,7 +19,7 @@ abstract class Element1 {
 
 class ArrayElement(
     val contents: Array[String]
-) extends Element1
+) extends Element
 
 class LineElement(s: String) extends ArrayElement(Array(s)) {
   override def height: Int = 1
@@ -30,14 +30,14 @@ class UniformElement(
     ch: Char,
     override val width: Int,
     override val height: Int
-) extends Element1 {
+) extends Element {
   private val line = ch.toString * width
   def contents     = Array.fill(height)(line)
 }
 
 object Element1Client extends App {
 
-  val element1: Element1 = new ArrayElement(Array("foo", "barbar"))
+  val element1: Element = new ArrayElement(Array("foo", "barbar"))
   println(s"element1 [$element1]")
   println(s"element1.contents [${element1.contents}]")
   println(s"element1.height [${element1.height}]")
@@ -45,7 +45,7 @@ object Element1Client extends App {
 
   println("------")
 
-  val element2: Element1 = new LineElement("foo")
+  val element2: Element = new LineElement("foo")
   println(s"element2 [$element2]")
   println(s"element2.contents [${element2.contents}]")
   println(s"element2.height [${element2.height}]")
@@ -53,7 +53,7 @@ object Element1Client extends App {
 
   println("------")
 
-  val element3: Element1 = new UniformElement('x', 2, 3)
+  val element3: Element = new UniformElement('x', 2, 3)
   println(s"element3 [$element3]")
   println(s"element3.contents [${element3.contents}]")
   println(s"element3.height [${element3.height}]")
