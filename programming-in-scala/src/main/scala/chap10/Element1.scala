@@ -20,6 +20,8 @@ abstract class Element1 {
 class ArrayElement(conts: Array[String]) extends Element1 {
 
   override def contents: Array[String] = conts
+  // 以下のようにフィールドでメソッドをオーバライド可能
+//  val contents: Array[String] = conts
 
 }
 
