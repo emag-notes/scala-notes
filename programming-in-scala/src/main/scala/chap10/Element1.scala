@@ -21,11 +21,24 @@ class ArrayElement(
     val contents: Array[String]
 ) extends Element1
 
+class LineElement(s: String) extends ArrayElement(Array(s)) {
+  override def height: Int = 1
+  override def width: Int  = s.length
+}
+
 object Element1Client extends App {
 
-  val element = new ArrayElement(Array("foo", "barbar"))
-  println(s"element [$element]")
-  println(s"element.contents [${element.contents}]")
-  println(s"element.height [${element.height}]")
-  println(s"element.width  [${element.width}]")
+  val element1: Element1 = new ArrayElement(Array("foo", "barbar"))
+  println(s"element1 [$element1]")
+  println(s"element1.contents [${element1.contents}]")
+  println(s"element1.height [${element1.height}]")
+  println(s"element1.width  [${element1.width}]")
+
+  println("------")
+
+  val element2: Element1 = new LineElement("foo")
+  println(s"element2 [$element2]")
+  println(s"element2.contents [${element2.contents}]")
+  println(s"element2.height [${element2.height}]")
+  println(s"element2.width  [${element2.width}]")
 }
