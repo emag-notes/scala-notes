@@ -17,18 +17,15 @@ abstract class Element1 {
     else contents(0).length
 }
 
-class ArrayElement(conts: Array[String]) extends Element1 {
-
-  override def contents: Array[String] = conts
-  // 以下のようにフィールドでメソッドをオーバライド可能
-//  val contents: Array[String] = conts
-
-}
+class ArrayElement(
+    val contents: Array[String]
+) extends Element1
 
 object Element1Client extends App {
 
   val element = new ArrayElement(Array("foo", "barbar"))
   println(s"element [$element]")
+  println(s"element.contents [${element.contents}]")
   println(s"element.height [${element.height}]")
   println(s"element.width  [${element.width}]")
 }
