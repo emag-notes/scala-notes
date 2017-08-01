@@ -36,7 +36,7 @@ class UniformElement(
   def contents     = Array.fill(height)(line)
 }
 
-object Element1Client extends App {
+object ElementClient extends App {
 
   val element1: Element = new ArrayElement(Array("foo", "barbar"))
   println(s"element1 [$element1]")
