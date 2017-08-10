@@ -10,7 +10,6 @@ scalacOptions ++= Seq(
   , "-unchecked"
   , "-encoding"
   , "UTF-8"
-  , "-Xfatal-warnings"
   , "-language:_"
   , "-Ywarn-adapted-args" // Warn if an argument list is modified to match the receiver
   , "-Ywarn-dead-code" // Warn when dead code is identified.
