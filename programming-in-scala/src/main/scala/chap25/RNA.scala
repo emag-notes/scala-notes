@@ -1,7 +1,7 @@
 package chap25
 
 import collection.IndexedSeqLike
-import collection.mutable.{ArrayBuffer, Builder}
+import collection.mutable.{ ArrayBuffer, Builder }
 import scala.collection.generic.CanBuildFrom
 
 final class RNA private (val groups: Array[Int], val length: Int)
@@ -56,7 +56,7 @@ object RNA {
 
   implicit def canBuildFrom: CanBuildFrom[RNA, Base, RNA] =
     new CanBuildFrom[RNA, Base, RNA] {
-      override def apply(): Builder[Base, RNA] = newBuilder
+      override def apply(): Builder[Base, RNA]          = newBuilder
       override def apply(from: RNA): Builder[Base, RNA] = newBuilder
     }
 }

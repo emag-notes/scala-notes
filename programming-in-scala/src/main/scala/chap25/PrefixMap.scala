@@ -1,11 +1,11 @@
 package chap25
 
-import collection.{mutable, _}
+import collection.{ mutable, _ }
 
 class PrefixMap[T] extends mutable.Map[String, T] with mutable.MapLike[String, T, PrefixMap[T]] {
 
   var suffixes: immutable.Map[Char, PrefixMap[T]] = Map.empty
-  var value: Option[T] = None
+  var value: Option[T]                            = None
 
   override def get(s: String): Option[T] =
     if (s.isEmpty) value
@@ -27,13 +27,14 @@ class PrefixMap[T] extends mutable.Map[String, T] with mutable.MapLike[String, T
     withPrefix(s).value = Some(elem)
 
   override def remove(s: String): Option[T] =
-    if (s.isEmpty) { val prev = value; value = None; prev }
-    else suffixes get s(0) flatMap (_.remove(s substring 1))
+    if (s.isEmpty) { val prev = value; value = None; prev } else suffixes get s(0) flatMap (_.remove(s substring 1))
 
   override def iterator: Iterator[(String, T)] =
     (for (v <- value.iterator) yield ("", v)) ++
-      (for ((chr, m) <- suffixes.iterator;
-            (s, v) <- m.iterator) yield (chr +: s, v))
+    (for {
+      (chr, m) <- suffixes.iterator
+      (s, v)   <- m.iterator
+    } yield (chr +: s, v))
 
   override def +=(kv: (String, T)): this.type = { update(kv._1, kv._2); this }
 
@@ -42,7 +43,7 @@ class PrefixMap[T] extends mutable.Map[String, T] with mutable.MapLike[String, T
   override def empty = new PrefixMap[T]
 }
 
-import collection.mutable.{Builder, MapBuilder}
+import collection.mutable.{ Builder, MapBuilder }
 import scala.collection.generic.CanBuildFrom
 
 object PrefixMap {
@@ -61,6 +62,6 @@ object PrefixMap {
   implicit def canBuildFrom[T]: CanBuildFrom[PrefixMap[_], (String, T), PrefixMap[T]] =
     new CanBuildFrom[PrefixMap[_], (String, T), PrefixMap[T]] {
       override def apply(from: PrefixMap[_]) = newBuilder[T]
-      override def apply() = newBuilder[T]
+      override def apply()                   = newBuilder[T]
     }
 }

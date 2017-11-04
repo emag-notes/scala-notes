@@ -8,7 +8,10 @@ object RNAClient extends App {
   println(rna take 3)
   println(rna filter (_ != U))
 
-  println(rna map { case A => T case b => b })
+  println(rna map {
+    case A => T
+    case b => b
+  })
   println(rna ++ rna)
 
   println(rna map Base.toInt)

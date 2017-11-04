@@ -8,7 +8,10 @@ object RNA2Client extends App {
   println(rna2 take 3)
   println(rna2 filter (_ != U))
 
-  println(rna2 map { case A => T case b => b })
+  println(rna2 map {
+    case A => T
+    case b => b
+  })
   println(rna2 ++ rna2)
 
   println(rna2 map Base.toInt)
