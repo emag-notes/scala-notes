@@ -25,6 +25,7 @@ scalacOptions ++= Seq(
 libraryDependencies ++= Seq(
   "org.scala-lang.modules" %% "scala-xml" %  "1.0.6",
   "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.6",
+  "org.scala-lang.modules" %% "scala-swing" % "2.0.1",
   "org.scalatest" %% "scalatest" % "3.0.1" % Test,
   "org.scalacheck" %% "scalacheck" % "1.13.4" % Test
 )
