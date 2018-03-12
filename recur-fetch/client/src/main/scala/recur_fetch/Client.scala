@@ -10,13 +10,14 @@ class Client(apiEndpoint: String = "http://localhost:8080")(implicit ec: Executi
 
   private val wsClient = StandaloneAhcWSClient()
 
-  def fetch(url: String): Future[String] = {
+  def fetch(path: String): Future[String] = {
     wsClient
-      .url(s"$apiEndpoint/$url")
+      .url(s"$apiEndpoint$path")
       .get()
       .map { response =>
         response.body
       }
   }
 
+  def close() = wsClient.close()
 }
