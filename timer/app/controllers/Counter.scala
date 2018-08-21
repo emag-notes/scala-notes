@@ -1,6 +1,6 @@
 package controllers
 
-import java.time.LocalDateTime
+import java.time._
 import java.util.concurrent.atomic.{AtomicBoolean, AtomicInteger}
 
 import akka.actor.ActorSystem
@@ -23,7 +23,8 @@ class DefaultCounter @Inject()(system: ActorSystem)(
 
   private val apiLimitRemaining: AtomicInteger = new AtomicInteger(Limit)
 
-  private val apiRestrictedDueToRateLimitExceeded: AtomicBoolean = new AtomicBoolean(false)
+  private val apiRestrictedDueToRateLimitExceeded: AtomicBoolean =
+    new AtomicBoolean(false)
 
   override def count(): Future[Int] = {
     if (isRestrictedToUseTheApi)
@@ -39,7 +40,26 @@ class DefaultCounter @Inject()(system: ActorSystem)(
     }
   }
 
-  private def isRestrictedToUseTheApi: Boolean = apiRestrictedDueToRateLimitExceeded.get() // || or other reason...
+  private def isRestrictedToUseTheApi: Boolean =
+    apiRestrictedDueToRateLimitExceeded.get() ||
+      isDuringMaintenance(ZonedDateTime.now(ZoneId.of("UTC")))
+
+  private def isDuringMaintenance(now: ZonedDateTime): Boolean =
+    now.isAfter(maintenanceStart(now)) && now.isBefore(maintenanceEnd(now))
+
+  private def maintenanceStart(now: ZonedDateTime) = maintenanceHour(19, now)
+
+  private def maintenanceEnd(now: ZonedDateTime) = maintenanceHour(21, now)
+
+  private def maintenanceHour(hour: Int, now: ZonedDateTime) =
+    ZonedDateTime.of(now.getYear,
+                     now.getMonthValue,
+                     now.getDayOfMonth,
+                     hour,
+                     0,
+                     0,
+                     0,
+                     now.getZone)
 
   private def requestCounterApi(): Future[Int] =
     apiLimitRemaining.decrementAndGet() match {
